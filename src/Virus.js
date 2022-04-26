@@ -18,7 +18,8 @@ class Virus {
 
         // TEST ONLY
         let gen = [0.5,0.3,0.7]
-        operators.segregation(gen)
+        let res = operators.duplication(gen)
+        // console.log(res)
         // console.log(operators.duplication(gen))
     }
 
