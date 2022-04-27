@@ -1,30 +1,27 @@
 const reproduceFactor = require("./reproduceFactor");
 const operators = require("./VirusOperators");
-
-const generateGenes = (N) => {
-    let genes = []
-    for (let i = 0; i < N; i++) {
-        genes.push(parseFloat(Math.random().toFixed(3)))
-    }
-    return genes
-}
+const utilities = require("./utilities");
 
 
 class Virus {
-    constructor(genesAmount) {
-        this.genes = generateGenes(genesAmount)
+    constructor({genesAmount, genes, cameFrom, mutationChance}) {
+        this.genes = genes? genes : utilities.generateGenes(genesAmount)
+        this.cameFrom = cameFrom || 'initial'
+        this.mutationChance = mutationChance || Math.random()
         this.reproduceFactor = reproduceFactor(this.genes)
-
-
-        // TEST ONLY
-        let gen = [0.5,0.3,0.7]
-        let res = operators.duplication(gen)
-        // console.log(res)
-        // console.log(operators.duplication(gen))
     }
 
     reproduce() {
-        // console.log(this.genes)
+        if(this.mutationChance < Math.random()){
+            return
+        }
+
+        let randomOperator = operators.randomOperator()
+        return new Virus({
+            genes: randomOperator(this.genes),
+            cameFrom: randomOperator.name,
+            mutationChance: this.mutationChance
+        })
     }
 }
 
