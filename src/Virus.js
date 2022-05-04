@@ -9,9 +9,16 @@ class Virus {
         this.cameFrom = cameFrom || 'initial'
         this.mutationChance = mutationChance || Math.random()
         this.reproduceFactor = reproduceFactor(this.genes)
+
+
+        // TEST ONLY
+        const genesTest = [0.2,0.5,0.4,0.3]
+        let res = operators.segregation(genesTest)
+        console.log('result: ' + res)
     }
 
     reproduce() {
+        return //TODO: УБРАТЬ
         if(this.mutationChance < Math.random()){
             return
         }
