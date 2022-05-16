@@ -1,93 +1,64 @@
 const Virus = require("./Virus");
 const Entity = require("./Entity");
 const stats = require("./stats");
-const utilities = require("./utilities");
+const config = require("./config");
 
-const virusStartStats = {
-    genes: 5,
-    amount: 10
+const createEntities = () => {
+    const entities = []
+    for (let i = 0; i < config.entityStartStats.amount; i++) {
+        const entity = new Entity({
+            genesAmount: config.entityStartStats.genes,
+            maxViruses: config.entityStartStats.maxViruses
+        })
+
+        entities.push(entity)
+    }
+
+    return entities
 }
 
-const entityStartStats = {
-    genes: 5,
-    maxViruses: 800
-}
+const init = (showStats, extendedStats = false) => {
+    const entities = createEntities()
 
-const algorithmParams = {
-    virusFactor: {
-        mutationChance: 0.5,
-        stealthFactor: 0 // не реализовано?
-    },
-    entityFactor: {
-        sightFactor: 0.3 // не реализовано?
-    },
-    epochCount: 10,
-}
-
-
-const init = (showStats , extendedStats = false) => {
     // первое заражение
-    const entity = new Entity({
-        genesAmount: entityStartStats.genes,
-        maxViruses: entityStartStats.maxViruses
-    })
+    for (let i = 0; i < config.virusStartStats.amount; i++) {
+        const randomEntityNumber = Math.round(Math.random() * (entities.length - 1))
+        const entity = entities[randomEntityNumber]
 
-    for (let i = 0; i < virusStartStats.amount; i++) {
         let virus = new Virus({
-            genesAmount: virusStartStats.genes,
-            mutationChance: algorithmParams.virusFactor.mutationChance
+            genesAmount: config.virusStartStats.genes,
+            mutationChance: config.algorithmParams.virusFactor.mutationChance,
+            parentEntity: entity
         })
         entity.infect(virus)
     }
 
     // "жизнь вируса в организме"
-    for (let i = 0; i < algorithmParams.epochCount; i++) {
-        entity.virusReproduce()
-        entity.killVirus()
-
-        if (!entity.isAlive) {
-            break
-        }
+    for (let i = 0; i < config.algorithmParams.epochCount; i++) {
+        entities.forEach(entity => {
+            if (!entity.isAlive) {
+                return
+            }
+            entity.virusReproduce()
+            entity.killVirus(config.algorithmParams.stealthSightMechanic)
+        })
     }
 
     if (showStats) {
-        console.log(`Состояние организма - ${entity.isAlive ? 'жив' : 'помер'}`)
-        console.log(`Количество вирусов - ${entity.viruses.length}`)
+        // console.log(`Состояние организма - ${entity.isAlive ? 'жив' : 'помер'}`)
+        // console.log(`Количество вирусов - ${entity.viruses.length}`)
         console.log(`Количество улучшений вируса через мутацию - ${stats.virusReproduces.mutation}`)
         console.log(`Количество улучшений вируса через транслокацию - ${stats.virusReproduces.translocation}`)
         console.log(`Степень улучшений вируса через мутацию - ${stats.reproduceRatedFactor.mutation}`)
         console.log(`Степень улучшений вируса через транслокацию - ${stats.reproduceRatedFactor.translocation}`)
-        if(extendedStats) {
+        if (extendedStats) {
             console.log('Особи, обеспечивающие наилучшее значение критерия оптимальности...')
-            console.table(entity.viruses.map(virus => {
-                virus.entityReproduceFactor = entity.reproduceFactor
-                return virus
-            }))
+            // console.table(entity.viruses.map(virus => {
+            //     virus.entityReproduceFactor = entity.reproduceFactor
+            //     return virus
+            // }))
         }
-    }
-    return {
-        virusAmount: entity.viruses.length,
-        lethality: entity.isAlive ? 1 : 0,
     }
 }
 
-init(false, false)
-
-
-
-
-
-
-
-
-
-
-// const virusAmountArray = []
-// const lethalityArray = []
-// for (let i = 0; i < 1000; i++) {
-//     let {virusAmount, lethality} = init(false)
-//     virusAmountArray.push(virusAmount)
-//     lethalityArray.push(lethality)
-// }
-// console.log('Среднее количество вирусов ' + utilities.average(virusAmountArray))
-// console.log('Средняя выживаемость ' +utilities.average(lethalityArray))
+init(true, false)

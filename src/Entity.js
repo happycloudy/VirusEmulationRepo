@@ -55,6 +55,11 @@ class Entity {
         this.viruses = newViruses
     }
 
+    getRandomVirus() {
+        const randomNumber = Math.floor(Math.random() * (this.viruses.length - 1))
+        return this.viruses[randomNumber]
+    }
+
     killVirus() {
         this.viruses = this.viruses.filter(virus => virus.reproduceFactor > this.reproduceFactor)
     }

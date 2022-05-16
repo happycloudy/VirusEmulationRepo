@@ -77,7 +77,6 @@ const FragmentaryInversion = (genes) => {
     let counter = tmp.length - 1
 
     for (let i = breakpoint; i > breakpoint - inversionLength; i--) {
-        console.log(counter)
         genes[i] = tmp[counter]
         counter--
     }
@@ -88,7 +87,7 @@ const FragmentaryInversion = (genes) => {
 const operators = {
     mutation: Mutation,
     duplication: Duplication,
-    // segregation: Segregation, // отдельный вызов
+    segregation: Segregation, // отдельный вызов
     translocation: Translocation,
     fragmentaryInversion: FragmentaryInversion,
 }
