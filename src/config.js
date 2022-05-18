@@ -14,11 +14,13 @@ module.exports = {
         virusFactor: {
             mutationChance: 0.5,
         },
-        entityFactor: {},
+        entityFactor: {
+            infectChance: 0.3,
+        },
         epochCount: 10,
         segregationMaxViruses: 5,
         stealthSightMechanic: {
-            enabled: true,
+            enabled: false,
             maxStealthFactor: 0.5,
             maxSightFactor: 0.3
         }

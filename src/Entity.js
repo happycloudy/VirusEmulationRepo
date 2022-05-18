@@ -1,6 +1,7 @@
 const stats = require("./stats");
 const utilities = require("./utilities");
 const reproduceFactor = require("./reproduceFactor");
+const config = require("./config");
 
 class Entity {
     constructor({genesAmount, genes, maxViruses}) {
@@ -10,6 +11,10 @@ class Entity {
         this.isAlive = true
         this.viruses = []
         this.reproduceFactor = reproduceFactor(this.genes)
+
+        if (config.algorithmParams.stealthSightMechanic.enabled) {
+            this.sightFactor = Math.random() * config.algorithmParams.stealthSightMechanic.maxSightFactor * 10
+        }
     }
 
     checkVirusesStatus(viruses = this.viruses) {
@@ -35,7 +40,7 @@ class Entity {
         for (const virus of this.viruses) {
             let newVirus = virus.reproduce()
             if (newVirus) {
-                if(newVirus.reproduceFactor < this.reproduceFactor) {
+                if (newVirus.reproduceFactor < this.reproduceFactor) {
                     continue
                 }
 
@@ -61,7 +66,11 @@ class Entity {
     }
 
     killVirus() {
-        this.viruses = this.viruses.filter(virus => virus.reproduceFactor > this.reproduceFactor)
+        if (config.algorithmParams.stealthSightMechanic.enabled) {
+            this.viruses = this.viruses.filter(virus => virus.stealthFactor > this.sightFactor)
+        } else {
+            this.viruses = this.viruses.filter(virus => virus.reproduceFactor > this.reproduceFactor)
+        }
     }
 }
 

@@ -11,6 +11,10 @@ class Virus {
         this.mutationChance = mutationChance || Math.random()
         this.reproduceFactor = reproduceFactor(this.genes)
         this.parentEntity = parentEntity
+
+        if(config.algorithmParams.stealthSightMechanic.enabled){
+            this.stealthFactor = Math.random() * config.algorithmParams.stealthSightMechanic.maxStealthFactor * 10
+        }
     }
 
     reproduce() {
