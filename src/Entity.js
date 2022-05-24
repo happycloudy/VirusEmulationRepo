@@ -44,10 +44,18 @@ class Entity {
                     continue
                 }
 
-
                 newViruses.push(newVirus)
+
                 if (newVirus.reproduceFactor > virus.reproduceFactor) {
                     stats.virusReproduces[newVirus.cameFrom.toLowerCase()] += 1
+
+                    if(stats.bestVirus !== undefined){
+                        if(newVirus.reproduceFactor > stats.bestVirus.reproduceFactor){
+                            stats.bestVirus = newVirus
+                        }
+                    } else {
+                        stats.bestVirus = newVirus
+                    }
                 }
             }
 

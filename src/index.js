@@ -23,7 +23,29 @@ const infectOthers = (entities) => {
     })
 }
 
-const init = (showStats, extendedStats = false) => {
+const showStats = () => {
+    const dataSeparator = '========================================================'
+
+    console.log('Улучшения:')
+    console.log(`через мутацию - ${stats.virusReproduces.mutation}`)
+    console.log(`через транслокацию - ${stats.virusReproduces.translocation}`)
+    console.log(`через дупликацию - ${stats.virusReproduces.duplication}`)
+    console.log(`через сегрегацию - ${stats.virusReproduces.segregation}`)
+    console.log(`через фрагментарную инверсию - ${stats.virusReproduces.fragmentaryinversion}`)
+    console.log(dataSeparator)
+    console.log('Степень улучшения:')
+    console.log(`через мутацию - ${stats.reproduceRatedFactor.mutation}`)
+    console.log(`через транслокацию - ${stats.reproduceRatedFactor.translocation}`)
+    console.log(`через дупликацию - ${stats.reproduceRatedFactor.duplication}`)
+    console.log(`через сегрегацию - ${stats.reproduceRatedFactor.segregation}`)
+    console.log(`через фрагментарную инверсию - ${stats.reproduceRatedFactor.fragmentaryinversion}`)
+    console.log(dataSeparator)
+    console.log(`Особь, обеспечивающая наилучшее значение критерия оптимальности...`)
+    console.log(`Критерий: ${stats.bestVirus.reproduceFactor}, где критерий родителя: ${stats.bestVirus.parentEntity.reproduceFactor}`)
+    console.log(`Решение: ${stats.bestVirus.genes}`)
+}
+
+const init = (stats) => {
     const entities = createEntities()
 
     // первое заражение
@@ -51,38 +73,9 @@ const init = (showStats, extendedStats = false) => {
         })
     }
 
-    if (showStats) {
-        const dataSeparator = '========================================================'
-
-        console.log('Улучшения:')
-        console.log(`через мутацию - ${stats.virusReproduces.mutation}`)
-        console.log(`через транслокацию - ${stats.virusReproduces.translocation}`)
-        console.log(`через дупликацию - ${stats.virusReproduces.duplication}`)
-        console.log(`через сегрегацию - ${stats.virusReproduces.segregation}`)
-        console.log(`через фрагментарную инверсию - ${stats.virusReproduces.fragmentaryinversion}`)
-        console.log(dataSeparator)
-        console.log('Степень улучшения:')
-        console.log(`через мутацию - ${stats.reproduceRatedFactor.mutation}`)
-        console.log(`через транслокацию - ${stats.reproduceRatedFactor.translocation}`)
-        console.log(`через дупликацию - ${stats.reproduceRatedFactor.duplication}`)
-        console.log(`через сегрегацию - ${stats.reproduceRatedFactor.segregation}`)
-        console.log(`через фрагментарную инверсию - ${stats.reproduceRatedFactor.fragmentaryinversion}`)
-        if (extendedStats) {
-            console.log('Особи, обеспечивающие наилучшее значение критерия оптимальности...')
-            let survivedViruses = []
-            entities.forEach(entity => {
-                if (entity.viruses.length) {
-                    entity.viruses.forEach(virus => {
-                        virus.entityReproduceFactor = entity.reproduceFactor
-                        delete virus.mutationChance
-                        survivedViruses.push(virus)
-                    })
-                }
-            })
-
-            console.table(survivedViruses.sort((a, b) => b.reproduceFactor - a.reproduceFactor))
-        }
+    if(stats){
+        showStats()
     }
 }
 
-init(true, false)
+init(true)

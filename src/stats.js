@@ -12,7 +12,8 @@ const initialState = {
         duplication: 0,
         fragmentaryinversion: 0,
         segregation: 0,
-    }
+    },
+    bestVirus: undefined
 }
 
 const stats = {...initialState}
