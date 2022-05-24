@@ -40,6 +40,7 @@ const Duplication = (genes) => {
 }
 
 const Segregation = (viruses) => {
+    // console.log(viruses)
     let newGenesLength = viruses[0].length
     let newGenes = []
     for (let i = 0; i < newGenesLength; i++) {

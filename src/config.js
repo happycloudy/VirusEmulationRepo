@@ -18,15 +18,15 @@ module.exports = {
             infectChance: 0.3,
         },
 
-        epochCount: 10,
+        epochCount: 50,
 
         segregationMaxViruses: 5,
         stealthSightMechanic: {
-            enabled: false,
+            enabled: true,
             maxStealthFactor: 0.5,
             maxSightFactor: 0.3
         },
 
-        infectChance: 0.3,
+        infectChance: 0.5,
     }
 }

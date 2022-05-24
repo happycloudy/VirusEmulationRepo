@@ -6,12 +6,12 @@ const initialState = {
         fragmentaryinversion: 0,
         segregation: 0,
     },
-    reproduceRatedFactor: {
-        mutation: 0,
-        translocation: 0,
-        duplication: 0,
-        fragmentaryinversion: 0,
-        segregation: 0,
+    reproduceRatedSum: {
+        mutation: [0,0],
+        translocation: [0,0],
+        duplication: [0,0],
+        fragmentaryinversion: [0,0],
+        segregation: [0,0],
     },
     bestVirus: undefined
 }

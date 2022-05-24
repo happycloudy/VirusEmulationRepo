@@ -35,6 +35,10 @@ class Entity {
     }
 
     virusReproduce() {
+        if(!this.isAlive){
+            return;
+        }
+
         let newViruses = [...this.viruses]
 
         for (const virus of this.viruses) {
@@ -48,6 +52,9 @@ class Entity {
 
                 if (newVirus.reproduceFactor > virus.reproduceFactor) {
                     stats.virusReproduces[newVirus.cameFrom.toLowerCase()] += 1
+
+                    stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][0] += (newVirus.reproduceFactor - virus.reproduceFactor)
+                    stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][1] += 1
 
                     if(stats.bestVirus !== undefined){
                         if(newVirus.reproduceFactor > stats.bestVirus.reproduceFactor){
@@ -79,6 +86,10 @@ class Entity {
         } else {
             this.viruses = this.viruses.filter(virus => virus.reproduceFactor > this.reproduceFactor)
         }
+    }
+
+    isInfected() {
+        return this.viruses.length
     }
 }
 

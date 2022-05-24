@@ -18,7 +18,7 @@ class Virus {
     }
 
     reproduce() {
-        if (this.mutationChance < Math.random()) {
+        if (!this.parentEntity.viruses.length || this.mutationChance < Math.random()) {
             return
         }
 
@@ -27,8 +27,10 @@ class Virus {
         if (randomOperator.name === 'Segregation') {
             const virusStack = [this.genes]
             for (let i = 0; i < Math.random() * config.algorithmParams.segregationMaxViruses - 1; i++) {
-                virusStack.push(this.parentEntity.getRandomVirus())
+                let randomVirus = this.parentEntity.getRandomVirus()
+                virusStack.push(randomVirus)
             }
+
             return new Virus({
                 genes: randomOperator(virusStack),
                 cameFrom: randomOperator.name,
@@ -43,8 +45,6 @@ class Virus {
                 parentEntity: this.parentEntity,
             })
         }
-
-
     }
 }
 
