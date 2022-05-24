@@ -22,7 +22,7 @@ module.exports = {
 
         segregationMaxViruses: 5,
         stealthSightMechanic: {
-            enabled: true,
+            enabled: false,
             maxStealthFactor: 0.5,
             maxSightFactor: 0.3
         },

@@ -67,7 +67,7 @@ const showStats = (entities) => {
     console.log(`через сегрегацию - ${(stats.reproduceRatedSum.segregation[0]/stats.reproduceRatedSum.segregation[1]).toFixed(3)}`)
     console.log(`через фрагментарную инверсию - ${(stats.reproduceRatedSum.fragmentaryinversion[0]/stats.reproduceRatedSum.fragmentaryinversion[1]).toFixed(3)}`)
     console.log(dataSeparator)
-    console.log(`Особь, обеспечивающая наилучшее значение критерия оптимальности...`)
+    console.log(`Особь, обеспечивающая наилучшее значение критерия оптимальности:`)
     console.log(`Критерий: ${stats.bestVirus ? stats.bestVirus.reproduceFactor: ''}, где критерий родителя: ${stats.bestVirus ? stats.bestVirus.parentEntity.reproduceFactor: ''}`)
     console.log(`Решение: ${stats.bestVirus.genes}`)
 }
