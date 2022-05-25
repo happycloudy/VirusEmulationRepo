@@ -72,7 +72,7 @@ const showStats = (entities) => {
     console.log(`Решение: ${stats.bestVirus.genes}`)
 }
 
-const init = (stats) => {
+const init = (isStats) => {
     const entities = createEntities()
 
     // первое заражение
@@ -96,14 +96,32 @@ const init = (stats) => {
             }
             entity.virusReproduce()
             entity.killVirus()
+
+            // console.log(entities.map(entity => {
+            //     return entity.viruses.map(virus => virus.reproduceFactor)
+            // }))
+            // console.log('=============================================')
         })
 
         infectOthers(entities)
     }
 
-    if (stats) {
+
+
+
+
+
+    if (isStats) {
         showStats(entities)
     }
 }
 
 init(true)
+
+
+// Выбор типа задачи - максимизация или минимизация
+// Выбор Диапазона, вывод графика(R от t)
+// добавить критей сходства, применение ген операторов
+
+// применение ген операторов - добавить шанс для каждого ген оператора (сумма = 1, сделать проверку)
+// уборка новых вирусов через длину евклида

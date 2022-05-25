@@ -5,19 +5,18 @@ const getRandomBorderedBy2 = (min, max) => {
     let res = getRandomBordered(min, max)
     return res % 2 === 0 ? res : getRandomBorderedBy2(min, max)
 }
-// positions - кратное 2м
-const permutation = (arr, positions, length) => {
-
-}
 
 
-const Mutation = (genes) => {
+const Mutation = (incomingGenes) => {
+    let genes = [...incomingGenes]
     let randomPosition = getRandomPosition(genes.length - 1)
     genes[randomPosition] = parseFloat(getRandomGen().toFixed(3))
+
     return genes
 }
 
-const Duplication = (genes) => {
+const Duplication = (incomingGenes) => {
+    let genes = [...incomingGenes]
     let randomPosition = getRandomPosition(genes.length - 1)
     let randomLength = getRandomPosition(Math.round((genes.length - 1 - randomPosition)))
 
@@ -40,7 +39,6 @@ const Duplication = (genes) => {
 }
 
 const Segregation = (viruses) => {
-    // console.log(viruses)
     let newGenesLength = viruses[0].length
     let newGenes = []
     for (let i = 0; i < newGenesLength; i++) {
@@ -50,7 +48,8 @@ const Segregation = (viruses) => {
     return newGenes
 }
 
-const Translocation = (genes) => {
+const Translocation = (incomingGenes) => {
+    let genes = [...incomingGenes]
     let randomStart = getRandomPosition(genes.length - 1)
     let randomEnd = getRandomBordered(randomStart, genes.length - 1)
     for (let i = randomStart; i < randomEnd; i++) {
@@ -59,7 +58,8 @@ const Translocation = (genes) => {
     return genes
 }
 
-const FragmentaryInversion = (genes) => {
+const FragmentaryInversion = (incomingGenes) => {
+    let genes = [...incomingGenes]
     let inversionPosition, inversionLength
     if (genes.length === 2) {
         inversionPosition = 0

@@ -12,7 +12,7 @@ class Virus {
         this.reproduceFactor = reproduceFactor(this.genes)
         this.parentEntity = parentEntity
 
-        if(config.algorithmParams.stealthSightMechanic.enabled){
+        if (config.algorithmParams.stealthSightMechanic.enabled) {
             this.stealthFactor = Math.random() * config.algorithmParams.stealthSightMechanic.maxStealthFactor * 10
         }
     }
@@ -25,18 +25,32 @@ class Virus {
         let randomOperator = operators.randomOperator()
 
         if (randomOperator.name === 'Segregation') {
-            const virusStack = [this.genes]
-            for (let i = 0; i < Math.random() * config.algorithmParams.segregationMaxViruses - 1; i++) {
-                let randomVirus = this.parentEntity.getRandomVirus()
-                virusStack.push(randomVirus)
-            }
+            if (this.parentEntity.viruses.length <= 1) {
+                let randomOperator = operators.randomOperator()
 
-            return new Virus({
-                genes: randomOperator(virusStack),
-                cameFrom: randomOperator.name,
-                mutationChance: this.mutationChance,
-                parentEntity: this.parentEntity,
-            })
+                while (randomOperator.name === 'Segregation') {
+                    randomOperator = operators.randomOperator()
+                }
+
+                return new Virus({
+                    genes: randomOperator(this.genes),
+                    cameFrom: randomOperator.name,
+                    mutationChance: this.mutationChance,
+                    parentEntity: this.parentEntity,
+                })
+            } else {
+                let virusStack = [this.genes]
+
+                this.parentEntity.getRandomVirusStack(virusStack)
+                // console.log('===================')
+                // console.log(virusStack)
+                return new Virus({
+                    genes: randomOperator(virusStack),
+                    cameFrom: randomOperator.name,
+                    mutationChance: this.mutationChance,
+                    parentEntity: this.parentEntity,
+                })
+            }
         } else {
             return new Virus({
                 genes: randomOperator(this.genes),

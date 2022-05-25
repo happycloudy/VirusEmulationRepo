@@ -12,13 +12,19 @@ module.exports = {
 
     algorithmParams: {
         virusFactor: {
-            mutationChance: 0.5,
+            mutationChance: 1,
+
+            mutationOperatorChance: 0.2,
+            DuplicationOperatorChance: 0.2,
+            SegregationOperatorChance: 0.2,
+            translocationOperatorChance: 0.2,
+            fragmentaryInversionOperatorChance: 0.2,
         },
         entityFactor: {
             infectChance: 0.3,
         },
 
-        epochCount: 50,
+        epochCount: 10,
 
         segregationMaxViruses: 5,
         stealthSightMechanic: {

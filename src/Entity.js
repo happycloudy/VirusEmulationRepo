@@ -35,7 +35,7 @@ class Entity {
     }
 
     virusReproduce() {
-        if(!this.isAlive){
+        if (!this.isAlive) {
             return;
         }
 
@@ -44,6 +44,7 @@ class Entity {
         for (const virus of this.viruses) {
             let newVirus = virus.reproduce()
             if (newVirus) {
+                // console.log(utilities.EuclidRange(virus.genes, newVirus.genes))
                 if (newVirus.reproduceFactor < this.reproduceFactor) {
                     continue
                 }
@@ -56,8 +57,8 @@ class Entity {
                     stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][0] += (newVirus.reproduceFactor - virus.reproduceFactor)
                     stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][1] += 1
 
-                    if(stats.bestVirus !== undefined){
-                        if(newVirus.reproduceFactor > stats.bestVirus.reproduceFactor){
+                    if (stats.bestVirus !== undefined) {
+                        if (newVirus.reproduceFactor > stats.bestVirus.reproduceFactor) {
                             stats.bestVirus = newVirus
                         }
                     } else {
@@ -75,9 +76,33 @@ class Entity {
         this.viruses = newViruses
     }
 
-    getRandomVirus() {
-        const randomNumber = Math.floor(Math.random() * (this.viruses.length - 1))
-        return this.viruses[randomNumber]
+    getRandomVirusStack(virusStack) {
+        let virusAmount = Math.round(Math.random() * (config.algorithmParams.segregationMaxViruses - 1))
+        while (virusAmount >= (this.viruses.length - 1)) {
+            virusAmount = Math.round(Math.random() * (config.algorithmParams.segregationMaxViruses - 1))
+        }
+
+        const filteredViruses = this.viruses.filter(virus => {
+            let same = utilities.isSameGenes(virus.genes, virusStack[0])
+            return !same
+        })
+
+        const virusNumbers = []
+        for (let i = 0; i < virusAmount; i++) {
+            let number = Math.round(Math.random() * (filteredViruses.length - 1))
+
+            while (virusNumbers.find(virusNumber => virusNumber === number)) {
+                number = Math.round(Math.random() * (filteredViruses.length - 1))
+            }
+            virusNumbers.push(number)
+        }
+
+        for (const virusNumber of virusNumbers) {
+            virusStack.push(filteredViruses[virusNumber].genes)
+        }
+
+
+        return virusStack
     }
 
     killVirus() {
