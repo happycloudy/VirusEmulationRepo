@@ -1,3 +1,5 @@
+const config = require('./config')
+
 const getRandomPosition = (length) => Math.round(Math.random() * length)
 const getRandomGen = () => Math.random()
 const getRandomBordered = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1))
@@ -5,6 +7,7 @@ const getRandomBorderedBy2 = (min, max) => {
     let res = getRandomBordered(min, max)
     return res % 2 === 0 ? res : getRandomBorderedBy2(min, max)
 }
+const getRandomPositive = (max) => Math.round(Math.random() * max)
 
 
 const Mutation = (incomingGenes) => {
@@ -88,20 +91,38 @@ const FragmentaryInversion = (incomingGenes) => {
 const operators = {
     mutation: Mutation,
     duplication: Duplication,
-    segregation: Segregation, // отдельный вызов
+    segregation: Segregation,
     translocation: Translocation,
     fragmentaryInversion: FragmentaryInversion,
 }
 
 operators.length = Object.keys(operators).length
 operators.randomOperator = () => {
-    let randomOperatorNumber = getRandomPosition(operators.length - 1)
-    let i = 0
-    for (const operatorName of Object.keys(operators)) {
-        if (i === randomOperatorNumber) {
-            return operators[operatorName]
-        }
-        i++
+    let randomOperatorNumber = Math.random()
+    let counter = 0
+    counter += config.algorithmParams.virus.mutationOperatorChance
+    if(randomOperatorNumber < counter){
+        return operators.mutation
+    }
+
+    counter += config.algorithmParams.virus.duplicationOperatorChance
+    if(randomOperatorNumber < counter){
+        return operators.duplication
+    }
+
+    counter += config.algorithmParams.virus.segregationOperatorChance
+    if(randomOperatorNumber < counter){
+        return operators.segregation
+    }
+
+    counter += config.algorithmParams.virus.translocationOperatorChance
+    if(randomOperatorNumber < counter){
+        return operators.translocation
+    }
+
+    counter += config.algorithmParams.virus.fragmentaryInversionOperatorChance
+    if(randomOperatorNumber < counter){
+        return operators.fragmentaryInversion
     }
 }
 

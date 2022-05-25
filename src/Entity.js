@@ -4,11 +4,8 @@ const reproduceFactor = require("./reproduceFactor");
 const config = require("./config");
 
 class Entity {
-    constructor({genesAmount, genes, maxViruses}) {
+    constructor({genesAmount, genes}) {
         this.genes = genes ? genes : utilities.generateGenes(genesAmount)
-        this.maxViruses = maxViruses
-
-        this.isAlive = true
         this.viruses = []
         this.reproduceFactor = reproduceFactor(this.genes)
 
@@ -17,28 +14,11 @@ class Entity {
         }
     }
 
-    checkVirusesStatus(viruses = this.viruses) {
-        if (viruses.length > this.maxViruses) {
-            this.isAlive = false
-            return false
-        } else {
-            return true
-        }
-    }
-
     infect(virus) {
-        if (!this.checkVirusesStatus()) {
-            return
-        }
-
         this.viruses.push(virus)
     }
 
     virusReproduce() {
-        if (!this.isAlive) {
-            return;
-        }
-
         let newViruses = [...this.viruses]
 
         for (const virus of this.viruses) {
@@ -65,11 +45,6 @@ class Entity {
                         stats.bestVirus = newVirus
                     }
                 }
-            }
-
-            if (!this.checkVirusesStatus(newViruses)) {
-                this.viruses = newViruses
-                return
             }
         }
 

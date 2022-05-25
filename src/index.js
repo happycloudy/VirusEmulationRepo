@@ -2,13 +2,13 @@ const Virus = require("./Virus");
 const Entity = require("./Entity");
 const stats = require("./stats");
 const config = require("./config");
+const reproduceFactor = require("./reproduceFactor");
 
 const createEntities = () => {
     const entities = []
     for (let i = 0; i < config.entityStartStats.amount; i++) {
         const entity = new Entity({
             genesAmount: config.entityStartStats.genes,
-            maxViruses: config.entityStartStats.maxViruses
         })
 
         entities.push(entity)
@@ -17,11 +17,12 @@ const createEntities = () => {
     return entities
 }
 
+const firstInfect = () => {
+
+}
+
 const infectOthers = (entities) => {
     entities.forEach((entity, entityId) => {
-        if(!entity.isAlive){
-            return
-        }
         entity.viruses.forEach((virus, virusId) => {
             if (config.algorithmParams.infectChance < Math.random()) {
                 let randomEntityId = Math.round(Math.random() * (entities.length - 1))
@@ -31,21 +32,24 @@ const infectOthers = (entities) => {
 
                 entities[randomEntityId].infect(virus)
                 entities[entityId].viruses.splice(virusId, 1)
+                virus.parentEntity = entities[randomEntityId]
             }
         })
     })
 }
 
+const showInfectMap = (entities) => {
+    console.log('Карта зараженных')
+    console.table(entities.map(entity => ({isInfected: entity.isInfected()})))
+}
+
 const showStats = (entities) => {
+    const dataSeparator = '========================================================'
+
     let virusesAmount = 0
     entities.forEach(entity => {
         virusesAmount += entity.viruses.length
     })
-
-    const dataSeparator = '========================================================'
-
-    console.log('Карта зараженных')
-    console.table(entities.map(entity => ({isInfected: entity.isInfected()})))
 
     if(!virusesAmount) {
         console.log('Вирусы вымерли')
@@ -69,7 +73,7 @@ const showStats = (entities) => {
     console.log(dataSeparator)
     console.log(`Особь, обеспечивающая наилучшее значение критерия оптимальности:`)
     console.log(`Критерий: ${stats.bestVirus ? stats.bestVirus.reproduceFactor: ''}, где критерий родителя: ${stats.bestVirus ? stats.bestVirus.parentEntity.reproduceFactor: ''}`)
-    console.log(`Решение: ${stats.bestVirus.genes}`)
+    console.log(`Решение: ${stats.bestVirus.genes.join(', ')}`)
 }
 
 const init = (isStats) => {
@@ -82,7 +86,7 @@ const init = (isStats) => {
 
         let virus = new Virus({
             genesAmount: config.virusStartStats.genes,
-            mutationChance: config.algorithmParams.virusFactor.mutationChance,
+            mutationChance: config.algorithmParams.virus.mutationChance,
             parentEntity: entity
         })
         entity.infect(virus)
@@ -90,17 +94,12 @@ const init = (isStats) => {
 
     // "жизнь вируса в организме"
     for (let i = 0; i < config.algorithmParams.epochCount; i++) {
+        let virusesNow = 0
+        entities.forEach(entity => entity.viruses.forEach(() => {virusesNow++}))
+        console.log(`Эпоха - ${i+1}, cуммарное количество вирусов - ${virusesNow}`)
         entities.forEach(entity => {
-            if (!entity.isAlive) {
-                return
-            }
             entity.virusReproduce()
             entity.killVirus()
-
-            // console.log(entities.map(entity => {
-            //     return entity.viruses.map(virus => virus.reproduceFactor)
-            // }))
-            // console.log('=============================================')
         })
 
         infectOthers(entities)
@@ -112,6 +111,7 @@ const init = (isStats) => {
 
 
     if (isStats) {
+        showInfectMap(entities)
         showStats(entities)
     }
 }
@@ -125,3 +125,7 @@ init(true)
 
 // применение ген операторов - добавить шанс для каждого ген оператора (сумма = 1, сделать проверку)
 // уборка новых вирусов через длину евклида
+
+
+
+// console.log(reproduceFactor([-500,-500]))
