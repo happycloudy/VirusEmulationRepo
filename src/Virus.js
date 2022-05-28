@@ -18,39 +18,22 @@ class Virus {
     }
 
     reproduce() {
-        if (!this.parentEntity.viruses.length || this.mutationChance < Math.random()) {
+        if (this.mutationChance < Math.random()) {
             return
         }
 
         let randomOperator = operators.randomOperator()
 
         if (randomOperator.name === 'Segregation') {
-            if (this.parentEntity.viruses.length <= 1) {
-                let randomOperator = operators.randomOperator()
+            let virusStack = [this.genes]
 
-                while (randomOperator.name === 'Segregation') {
-                    randomOperator = operators.randomOperator()
-                }
-
-                return new Virus({
-                    genes: randomOperator(this.genes),
-                    cameFrom: randomOperator.name,
-                    mutationChance: this.mutationChance,
-                    parentEntity: this.parentEntity,
-                })
-            } else {
-                let virusStack = [this.genes]
-
-                this.parentEntity.getRandomVirusStack(virusStack)
-                // console.log('===================')
-                // console.log(virusStack)
-                return new Virus({
-                    genes: randomOperator(virusStack),
-                    cameFrom: randomOperator.name,
-                    mutationChance: this.mutationChance,
-                    parentEntity: this.parentEntity,
-                })
-            }
+            utilities.getVirusesStack(virusStack)
+            return new Virus({
+                genes: randomOperator(virusStack),
+                cameFrom: randomOperator.name,
+                mutationChance: this.mutationChance,
+                parentEntity: this.parentEntity,
+            })
         } else {
             return new Virus({
                 genes: randomOperator(this.genes),

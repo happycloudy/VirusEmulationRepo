@@ -13,9 +13,13 @@ const initialState = {
         fragmentaryinversion: [0,0],
         segregation: [0,0],
     },
-    bestVirus: undefined
+    bestVirus: undefined,
+    bestVirusEver: undefined,
+    epochViruses: [],
+    bestViruses: [],
 }
 
-const stats = {...initialState}
+let stats = {...initialState}
+
 
 module.exports = stats

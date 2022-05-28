@@ -19,12 +19,18 @@ class Entity {
     }
 
     virusReproduce() {
+        if(this.viruses.length === 0){
+            return
+        }
+        // console.log(this.viruses)
         let newViruses = [...this.viruses]
 
         for (const virus of this.viruses) {
             let newVirus = virus.reproduce()
             if (newVirus) {
-                // console.log(utilities.EuclidRange(virus.genes, newVirus.genes))
+                if(utilities.EuclidRange(virus.genes, newVirus.genes) === 0 ){
+                    continue
+                }
                 if (newVirus.reproduceFactor < this.reproduceFactor) {
                     continue
                 }
@@ -36,14 +42,6 @@ class Entity {
 
                     stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][0] += (newVirus.reproduceFactor - virus.reproduceFactor)
                     stats.reproduceRatedSum[newVirus.cameFrom.toLowerCase()][1] += 1
-
-                    if (stats.bestVirus !== undefined) {
-                        if (newVirus.reproduceFactor > stats.bestVirus.reproduceFactor) {
-                            stats.bestVirus = newVirus
-                        }
-                    } else {
-                        stats.bestVirus = newVirus
-                    }
                 }
             }
         }
@@ -90,6 +88,10 @@ class Entity {
 
     isInfected() {
         return this.viruses.length
+    }
+
+    clearViruses() {
+        this.viruses = []
     }
 }
 
