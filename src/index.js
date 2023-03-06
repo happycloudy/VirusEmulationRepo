@@ -139,7 +139,7 @@ const showStats = () => {
     })
     console.log(dataSeparator)
     console.log(`Особь, обеспечивающая наилучшее значение критерия оптимальности:`)
-    console.log(`Критерий: ${stats.bestVirusEver ? stats.bestVirusEver.reproduceFactor : ''}, где критерий родителя: ${stats.bestVirusEver ? stats.bestVirusEver.parentEntity.reproduceFactor : ''}`)
+    console.log(`Критерий: -${stats.bestVirusEver ? stats.bestVirusEver.reproduceFactor : ''}, где критерий родителя: ${stats.bestVirusEver ? stats.bestVirusEver.parentEntity.reproduceFactor : ''}`)
     console.log(`Решение: ${stats.bestVirusEver.genes.join(', ')}`)
 }
 
@@ -147,7 +147,7 @@ const visualize = async (data) => {
     config.chartConfig.data.labels = data.map(item => item.epoch)
     config.chartConfig.data.datasets.push({
         label: "Результирующая функция",
-        data: data.map(item => item.virus.reproduceFactor),
+        data: data.map(item => -item.virus.reproduceFactor),
         fill: false,
         borderColor: ['rgb(51, 204, 204)'],
         borderWidth: 1,
